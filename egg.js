@@ -71,6 +71,17 @@ client.on(Events.GuildMemberAdd, async member => {
 	}
 
 	try {
+		const role = member.guild.roles.cache.get(eggRole);
+		if (role) {
+			await member.roles.add(role, 'Auto-assigned Egg role');
+		} else {
+			console.log('Egg role not found');
+		}
+	} catch (error) {
+		console.log(`Failed to assign Egg role to ${member.user.tag}:`, error);
+	}
+
+	try {
 		const general = await member.guild.channels.fetch(generalChannel);
 		if (!general) return;
 
