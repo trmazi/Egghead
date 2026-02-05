@@ -69,6 +69,30 @@ client.on(Events.GuildMemberAdd, async member => {
 	} catch (error) {
 		console.log(`Failed to set nickname for ${member.user.tag}:`, error);
 	}
+
+	try {
+		const general = await member.guild.channels.fetch(generalChannel);
+		if (!general) return;
+
+		const count = member.guild.memberCount;
+		const dozens = Math.floor(count / 12);
+		const remainder = count % 12;
+
+		let eggCountMessage;
+		if (dozens === 0) {
+			eggCountMessage = `We currently have **${remainder} egg${remainder !== 1 ? 's' : ''}** <a:eggspin:1465219439871004829>`;
+		} else if (remainder === 0) {
+			eggCountMessage = `We now have **${dozens} dozen eggs** <a:eggspin:1465219439871004829>`;
+		} else {
+			eggCountMessage = `We now have **${dozens} dozen eggs and ${remainder} extra egg${remainder !== 1 ? 's' : ''}** <a:eggspin:1465219439871004829>`;
+		}
+
+		await general.send({
+			content: `<:egghead:1435894590623453237> Welcome, fellow egg ${member}!\n${eggCountMessage}`
+		});
+	} catch (error) {
+		console.log('Failed to send egg greeting:', error);
+	}
 });
 
 client.on(Events.MessageCreate, async message => {
