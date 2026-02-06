@@ -1,5 +1,5 @@
 const { Client, Events, GatewayIntentBits, Collection } = require('discord.js');
-const { token, generalChannel, eggChannel } = require('./config.json');
+const { token, generalChannel, eggChannel, eggRole } = require('./config.json');
 const fs = require('node:fs');
 const path = require('node:path');
 const { initDB } = require('./helpers/db');
