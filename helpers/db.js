@@ -1,5 +1,5 @@
 const path = require('path');
-const defaultData = require('./default')
+const { defaultData } = require('./default');
 let db;
 
 async function initDB() {
@@ -11,7 +11,7 @@ async function initDB() {
 	const file = path.join(__dirname, '../db.json');
 	const adapter = new JSONFile(file);
 
-	db = new Low(adapter, defaultData.defaultData);
+	db = new Low(adapter, defaultData);
 
 	await db.read();
 

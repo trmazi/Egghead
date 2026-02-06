@@ -1,15 +1,17 @@
-export const defaultData = {
-  "meta": {
-    "seeded": false,
-    "seededAt": null
-  },
-  "totals": {
-    "eggs": 0,
-    "rotten": 0
-  },
-  "users": {},
-  "milestones": {
-    "next": 100,
-    "reached": []
-  }
-}
+const defaultData = {
+	meta: {
+		seeded: false,
+		seededAt: null
+	},
+	totals: {
+		eggs: 0,
+		rotten: 0
+	},
+	users: {},
+	milestones: {
+		next: 100,
+		reached: []
+	}
+};
+
+module.exports = { defaultData };
