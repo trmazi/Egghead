@@ -2,7 +2,7 @@ const { Client, Events, GatewayIntentBits, Collection } = require('discord.js');
 const { token, generalChannel, eggChannel } = require('./config.json');
 const fs = require('node:fs');
 const path = require('node:path');
-const { db, initDB } = require('./helpers/db');
+const { initDB } = require('./helpers/db');
 const { recordEgg, recordRotten, checkMilestone } = require('./helpers/logic');
 
 const client = new Client(
@@ -32,7 +32,7 @@ for (const file of commandFiles) {
 
 client.once(Events.ClientReady, async c => {
 	console.log(`Ready! Logged in as ${c.user.tag}`);
-	await initDB();
+	const db = await initDB();
 
 	if (!db.data.meta.seeded) {
 		console.log('Seeding egg history...');

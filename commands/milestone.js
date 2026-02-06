@@ -1,5 +1,5 @@
 const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
-const { db } = require('../helpers/db');
+const { initDB } = require('../helpers/db');
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -7,7 +7,7 @@ module.exports = {
 		.setDescription('View the current egg milestone'),
 
 	async execute(interaction) {
-		await db.read();
+		const db = await initDB();
 
 		const total = db.data.totals.eggs;
 		const next = db.data.milestones.next;

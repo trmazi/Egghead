@@ -1,7 +1,7 @@
-const { db } = require('./db');
+const { initDB } = require('./db');
 
 async function recordEgg(userId) {
-	await db.read();
+	const db = await initDB();
 
 	db.data.totals.eggs++;
 
@@ -15,7 +15,7 @@ async function recordEgg(userId) {
 }
 
 async function recordRotten(userId) {
-	await db.read();
+	const db = await initDB();
 
 	db.data.totals.rotten++;
 

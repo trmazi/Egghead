@@ -1,5 +1,5 @@
 const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
-const { db } = require('../helpers/db');
+const { initDB } = require('../helpers/db');
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -7,7 +7,7 @@ module.exports = {
 		.setDescription('View egg statistics'),
 
 	async execute(interaction) {
-		await db.read();
+		const db = await initDB();
 
 		const user = db.data.users[interaction.user.id] || { eggs: 0, rotten: 0 };
 		const total = db.data.totals.eggs;
