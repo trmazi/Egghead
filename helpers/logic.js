@@ -10,7 +10,6 @@ async function recordEgg(userId) {
 	}
 	db.data.users[userId].eggs++;
 
-	await checkMilestone();
 	await db.write();
 }
 
