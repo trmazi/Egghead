@@ -2,6 +2,8 @@ const { Client, Events, GatewayIntentBits, Collection } = require('discord.js');
 const { token, generalChannel, eggChannel } = require('./config.json');
 const fs = require('node:fs');
 const path = require('node:path');
+const { db, initDB } = require('./helpers/db');
+const { recordEgg, recordRotten, checkMilestone } = require('./helpers/logic');
 
 const client = new Client(
 	{ 
@@ -28,15 +30,39 @@ for (const file of commandFiles) {
 	}
 }
 
-client.once(Events.ClientReady, c => {
+client.once(Events.ClientReady, async c => {
 	console.log(`Ready! Logged in as ${c.user.tag}`);
-	client.user.setPresence({
-		activities: [{ 
-			name: "Egg Venture",
-			type: 0
-		}],
-		status: "online"
-	});
+	await initDB();
+
+	if (!db.data.meta.seeded) {
+		console.log('Seeding egg history...');
+		const channel = await c.channels.fetch(eggChannel);
+
+		let lastId;
+		while (true) {
+			const messages = await channel.messages.fetch({
+				limit: 100,
+				before: lastId
+			});
+			if (messages.size === 0) break;
+
+			for (const msg of messages.values()) {
+				if (msg.author.bot) continue;
+
+				if (msg.content.trim().toLowerCase() === 'egg') {
+					await recordEgg(msg.author.id);
+				} else {
+					await recordRotten(msg.author.id);
+				}
+			}
+			lastId = messages.last().id;
+		}
+
+		db.data.meta.seeded = true;
+		db.data.meta.seededAt = Date.now();
+		await db.write();
+		console.log('Seeding complete');
+	}
 });
 
 client.on(Events.InteractionCreate, async interaction => {
@@ -112,26 +138,13 @@ client.on(Events.MessageCreate, async message => {
 
 	const content = message.content.trim().toLowerCase();
 	if (content === 'egg') {
-		try {
-			await message.react('<:eggstare:1216148741354946560>');
-		} catch (err) {
-			console.log('Failed to react with eggstare:', err);
-		}
-		return;
+		await recordEgg(message.author.id);
+		await message.react('<:eggstare:1216148741354946560>').catch(() => {});
+		await checkMilestone(client);
 	} else {
-		try {
-			await message.delete();
-
-			const general = await message.guild.channels.fetch(generalChannel);
-			if (!general) return;
-
-			await general.send({
-				content: `<:egghead:1435894590623453237> ${message.author} is a **rotten egg**.`,
-				embeds: [{ image: { url: 'https://i.imgur.com/GdHbol7.gif' } }]
-			});
-		} catch (err) {
-			console.log('Failed to punish rotten egg:', err);
-		}
+		await recordRotten(message.author.id);
+		await message.react('<a:eggGun:1469116796735852555>').catch(() => {});
+		await message.react('<:eggno:1464143612743913579>').catch(() => {});
 	}
 });
 
