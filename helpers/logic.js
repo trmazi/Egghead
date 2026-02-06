@@ -28,6 +28,8 @@ async function recordRotten(userId) {
 }
 
 async function checkMilestone(client) {
+	const db = await initDB();
+
 	const total = db.data.totals.eggs;
 	const next = db.data.milestones.next;
 
