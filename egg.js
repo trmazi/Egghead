@@ -139,7 +139,6 @@ client.on(Events.MessageCreate, async message => {
 	const content = message.content.trim().toLowerCase();
 	if (content === 'egg') {
 		await recordEgg(message.author.id);
-		await message.react('<:eggstare:1216148741354946560>').catch(() => {});
 		await checkMilestone(client);
 	} else {
 		await recordRotten(message.author.id);
