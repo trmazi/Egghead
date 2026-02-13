@@ -40,7 +40,7 @@ async function checkMilestone(client) {
 		db.data.milestones.next = Math.floor(next * 1.75);
 
 		if (client) {
-			const general = await client.channels.fetch(require('./config.json').generalChannel)
+			const general = await client.channels.fetch(require('../config.json').generalChannel)
 				.catch(() => null);
 
 			if (general) {
