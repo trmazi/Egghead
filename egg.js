@@ -136,7 +136,7 @@ client.on(Events.MessageCreate, async message => {
 	if (message.author.bot) return;
 	if (message.channel.id !== eggChannel) return;
 
-	const content = message.content.trim().toLowerCase();
+	const content = message.content.trim();
 	if (content === 'egg') {
 		await recordEgg(message.author.id);
 		await checkMilestone(client);
