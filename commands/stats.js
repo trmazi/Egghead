@@ -59,8 +59,8 @@ module.exports = {
 			)
 
         const leaderboardEmbed = new EmbedBuilder()
-			.setTitle('<:egghead:1435894590623453237> Egg Leaderboard')
-			.setDescription(leaderboard || 'No eggs yet… tragic.')
+			.setTitle('<:egghead:1435894590623453237> The Five Hardest Boiled Eggs')
+			.setDescription(leaderboard || 'No eggs yet... tragic.')
 			.setColor(0x629bf5)
 			.setFooter({ text: `Tracking since ${db.data.meta.seededAt ? new Date(db.data.meta.seededAt).toLocaleDateString() : 'unknown'}` });
 
