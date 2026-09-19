@@ -3,6 +3,6 @@
     "clientId": "",
 	"guildId": "",
 	"generalChannel": "",
-	"eggChannel": ""
+	"eggChannel": "",
 	"eggRole": ""
 }

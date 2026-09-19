@@ -50,7 +50,7 @@ client.once(Events.ClientReady, async c => {
 				if (msg.author.bot) continue;
 
 				if (msg.content.trim().toLowerCase() === 'egg') {
-					await recordEgg(msg.author.id);
+					await recordEgg(msg.author.id, msg.createdTimestamp);
 				} else {
 					await recordRotten(msg.author.id);
 				}

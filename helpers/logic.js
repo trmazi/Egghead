@@ -1,15 +1,21 @@
 const { initDB } = require('./db');
 
-async function recordEgg(userId) {
+async function recordEgg(userId, timestamp = Date.now()) {
 	const db = await initDB();
 
 	db.data.totals.eggs++;
 
 	if (!db.data.users[userId]) {
-		db.data.users[userId] = { eggs: 0, rotten: 0 };
+		db.data.users[userId] = {
+			eggs: 0,
+			rotten: 0,
+			eggTimestamps: []
+		};
 	}
-	db.data.users[userId].eggs++;
-
+	const user = db.data.users[userId];
+	user.eggTimestamps ||= [];
+	user.eggs++;
+	user.eggTimestamps.push(timestamp);
 	await db.write();
 }
 
@@ -19,10 +25,13 @@ async function recordRotten(userId) {
 	db.data.totals.rotten++;
 
 	if (!db.data.users[userId]) {
-		db.data.users[userId] = { eggs: 0, rotten: 0 };
+		db.data.users[userId] = {
+			eggs: 0,
+			rotten: 0,
+			eggTimestamps: []
+		};
 	}
 	db.data.users[userId].rotten++;
-
 	await db.write();
 }
 
